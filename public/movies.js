@@ -12,17 +12,17 @@ function videoEvents(video, on) {
   function onPause() {
     cjs.pause();
   }
-  function onTimeUpdate() {
+  function onSeek() {
     cjs.seek(video.currentTime);
   }
   if (on) {
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
-    video.addEventListener("timeupdate", onTimeUpdate);
+    video.addEventListener("seeked", onSeek);
   } else {
     video.removeEventListener("play", onPlay);
     video.removeEventListener("pause", onPause);
-    video.removeEventListener("timeupdate", onTimeUpdate);
+    video.removeEventListener("seeked", onSeek);
   }
 }
 
@@ -44,7 +44,9 @@ function openPlayer(torrent) {
       if (state.casting) {
         video.muted = true;
         cjs.cast(video.src);
-        cjs.seek(video.currentTime);
+        cjs.on("connect", () => {
+          cjs.seek(video.currentTime);
+        });
       } else {
         video.muted = false;
         cjs.disconnect();
