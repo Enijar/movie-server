@@ -1,4 +1,5 @@
 const player = document.querySelector(".player");
+const cjs = new Castjs();
 
 function openPlayer(torrent) {
   if (!player) {
@@ -11,6 +12,12 @@ function openPlayer(torrent) {
   video.src = `/stream/${torrent}`;
   player.style.pointerEvents = "all";
   player.style.opacity = 1;
+  const cast = player.querySelector("#cast");
+  if (cast && cjs.available) {
+    cast.addEventListener("click", () => {
+      cjs.cast(video.src);
+    });
+  }
 }
 
 function closePlayer() {
@@ -24,6 +31,9 @@ function closePlayer() {
   video.src = "";
   player.style.pointerEvents = "none";
   player.style.opacity = 0;
+  if (cjs.available) {
+    cjs.disconnect();
+  }
 }
 
 function renderMovies(movies, q = "") {

@@ -93,7 +93,8 @@ html {
   height: auto;
 }
 
-.player-video google-cast-launcher {
+.player-video #cast {
+  cursor: pointer;
   position: absolute;
   top: 0.5em;
   right: 0.5em;
