@@ -14,15 +14,16 @@ async function run() {
   await Promise.all(
     jobs.map(async ({ name, fn }) => {
       const job = await Job.findOne({ where: { name, processing: false } });
+      if (!job) return;
       const lastRun = job.lastRun === null ? -Infinity : +new Date(job.lastRun);
-      const shouldRun = lastRun + job.interval <= Date.now();
-      if (job && shouldRun) {
-        await job.update({ processing: true, lastRun: new Date() });
-        console.log(`[scheduler] start ${name}`);
-        await fn();
-        await job.update({ processing: false });
-        console.log(`[scheduler] end ${name}`);
-      }
+      const shouldRun = lastRun + job.interval <= +new Date();
+      console.log(lastRun, +new Date());
+      if (!shouldRun) return;
+      await job.update({ processing: true, lastRun: new Date() });
+      console.log(`[scheduler] start ${name}`);
+      await fn();
+      await job.update({ processing: false });
+      console.log(`[scheduler] end ${name}`);
     })
   );
 }
@@ -41,7 +42,9 @@ export default async function scheduler() {
   );
   const processingJobs = await Job.findAll({ where: { processing: true } });
   await Promise.all(
-    processingJobs.map((job) => job.update({ processing: false }))
+    processingJobs.map((job) =>
+      job.update({ processing: false, interval: job.interval })
+    )
   );
   schedule("* * * * *", run);
 }
