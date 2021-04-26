@@ -6,7 +6,7 @@ const jobs = [
   {
     name: "updateMovies",
     fn: updateMovies,
-    interval: 3600 * 12, // 12 hours
+    interval: 1000 * 3600 * 12, // 12 hours
   },
 ];
 
