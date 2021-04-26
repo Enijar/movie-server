@@ -29,22 +29,19 @@ async function run() {
 }
 
 export default async function scheduler() {
-  await Job.bulkCreate(
-    jobs.map((job) => {
-      return {
-        name: job.name,
-        interval: job.interval,
-      };
-    }),
-    {
-      ignoreDuplicates: true,
-    }
-  );
-  const processingJobs = await Job.findAll({ where: { processing: true } });
   await Promise.all(
-    processingJobs.map((job) =>
-      job.update({ processing: false, interval: job.interval })
-    )
+    jobs.map(async ({ name, interval }) => {
+      const job = await Job.findOne({ where: { name } });
+      if (!job) {
+        await Job.create({ name: interval });
+      } else {
+        await job.update({ interval });
+      }
+    })
+  );
+  const processingJobs = await Job.findAll();
+  await Promise.all(
+    processingJobs.map((job) => job.update({ processing: false }))
   );
   schedule("* * * * *", run);
 }
