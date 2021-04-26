@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "server-stream": "torrent-stream-server serve -c torrent-stream-server.config.json",
+    "server-stream": "torrent-stream-server serve -c src/config/torrent-stream-server.json",
     "server-dev": "nodemon --watch src/ src/index.ts",
     "server": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
