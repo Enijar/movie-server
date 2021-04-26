@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "stream-server": "torrent-stream-server serve -c torrent-stream-server.config.json",
+    "server-stream": "torrent-stream-server serve -c torrent-stream-server.config.json",
+    "server-dev": "nodemon --watch src/ src/index.ts",
     "server": "ts-node src/index.ts",
-    "dev-server": "nodemon --watch src/ src/index.ts",
-    "start": "concurrently \"npm run stream-server\" \"npm run dev-server\""
+    "build": "tsc -p tsconfig.json",
+    "start": "concurrently \"npm run server-stream\" \"npm run server-dev\""
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
