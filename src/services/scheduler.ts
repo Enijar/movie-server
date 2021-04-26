@@ -17,7 +17,6 @@ async function run() {
       if (!job) return;
       const lastRun = job.lastRun === null ? -Infinity : +new Date(job.lastRun);
       const shouldRun = lastRun + job.interval <= +new Date();
-      console.log(lastRun, +new Date());
       if (!shouldRun) return;
       await job.update({ processing: true, lastRun: new Date() });
       console.log(`[scheduler] start ${name}`);
