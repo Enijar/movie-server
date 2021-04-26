@@ -1,0 +1,113 @@
+:root {
+  --size: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+html {
+  font-family: Arial, sans-serif;
+  font-size: var(--size);
+  background-color: hsl(0, 0%, 10%);
+  color: hsl(0, 0%, 80%);
+  padding: 1em;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 1em;
+}
+
+.card {
+  font-size: 1em;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+.card:hover {
+  opacity: 0.6;
+}
+
+.card h3 {
+  font-size: 0.75em;
+}
+
+.search {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin-top: -1em;
+  margin-left: -1em;
+  margin-right: -1em;
+  padding: 0.5em 1em;
+  background-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.search input {
+  display: block;
+  width: 100%;
+  padding: 0.125em 0.25em;
+  color: hsl(0, 0%, 20%);
+}
+
+.player {
+  pointer-events: none;
+  opacity: 0;
+  position: fixed;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.player-video {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.player-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.player-video google-cast-launcher {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  width: 40px;
+  z-index: 1;
+}
+
+.player-close {
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+  top: 1em;
+  right: 1em;
+  font-size: 2em;
+  line-height: 0.5em;
+  color: hsl(0, 0%, 90%);
+}
