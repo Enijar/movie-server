@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build containers
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
+            cd /var/www/movie-server
+            git reset --hard
+            git checkout prod
+            git pull
+            npm install
+            npm run build
+            pm2 reload movie-server
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          privateKey: ${{ secrets.PRIVATE_KEY }}
