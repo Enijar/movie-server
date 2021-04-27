@@ -5,7 +5,17 @@ const routes = Router();
 
 routes.get("/api/movies", async (req, res) => {
   try {
-    const movies = await Movie.findAll();
+    const movies = await Movie.findAll({
+      attributes: [
+        "title",
+        "year",
+        "rating",
+        "runtime",
+        "summary",
+        "coverImage",
+        "torrents",
+      ],
+    });
 
     res.json(movies);
   } catch (err) {
