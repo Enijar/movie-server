@@ -76,6 +76,7 @@ function closePlayer() {
 }
 
 function renderMovies(movies, q = "") {
+  q = q.toLowerCase();
   return movies
     .filter((movie) => {
       return movie.title.toLowerCase().includes(q);
