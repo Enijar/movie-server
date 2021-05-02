@@ -4,7 +4,8 @@
     "server-dev": "nodemon --watch src/ src/index.ts",
     "server": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "concurrently \"npm run server-stream\" \"npm run server-dev\""
+    "start": "concurrently \"npm run server-stream\" \"npm run server-dev\"",
+    "update-movies": "ts-node src/cli/update-movies.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
