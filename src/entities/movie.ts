@@ -25,5 +25,5 @@ export default class Movie extends Model {
   coverImage: string;
 
   @Column(DataType.JSON)
-  torrents: Torrent[];
+  torrent: Torrent;
 }

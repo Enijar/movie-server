@@ -15,8 +15,12 @@ async function run() {
     jobs.map(async ({ name, fn }) => {
       const job = await Job.findOne({ where: { name, processing: false } });
       if (!job) return;
-      const lastRun = job.lastRun === null ? -Infinity : +new Date(job.lastRun);
-      const shouldRun = lastRun + job.interval <= +new Date();
+      const now = Date.now();
+      const lastRun =
+        job.lastRun.toString() === "Invalid Date"
+          ? now - job.interval
+          : +new Date(job.lastRun);
+      const shouldRun = lastRun + job.interval <= now;
       if (!shouldRun) return;
       await job.update({ processing: true, lastRun: new Date() });
       console.log(`[scheduler] start ${name}`);
@@ -42,5 +46,5 @@ export default async function scheduler() {
   await Promise.all(
     processingJobs.map((job) => job.update({ processing: false }))
   );
-  schedule("* * * * *", run);
+  run().finally(() => schedule("* * * * *", run));
 }

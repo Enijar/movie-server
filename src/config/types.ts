@@ -4,7 +4,7 @@ export type Torrent = {
   quality: string;
   seeds: string;
   peers: string;
-  size: string;
+  size: number;
 };
 
 export type MovieData = {
@@ -15,5 +15,5 @@ export type MovieData = {
   runtime: number;
   summary: string;
   coverImage: string;
-  torrents: Torrent[];
+  torrent: Torrent;
 };

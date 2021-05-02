@@ -82,7 +82,7 @@ function renderMovies(movies, q = "") {
       return movie.title.toLowerCase().includes(q);
     })
     .map((movie) => {
-      const torrent = movie.torrents[0]?.url ?? "";
+      const torrent = movie.torrent?.url ?? "";
       return `
         <div class="card" onclick="openPlayer('${torrent}')">
           <img src="${movie.coverImage}" alt="${movie.title}" loading="lazy" width="500" height="750" />

@@ -13,7 +13,7 @@ routes.get("/api/movies", async (req, res) => {
         "runtime",
         "summary",
         "coverImage",
-        "torrents",
+        "torrent",
       ],
     });
 

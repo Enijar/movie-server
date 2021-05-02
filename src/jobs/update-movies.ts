@@ -9,11 +9,13 @@ import {
 } from "../config/consts";
 import { request } from "../utils";
 import updateMovieCoverImage from "./update-movie-cover-image";
+import { Op } from "sequelize";
 
 async function saveMovies(movies: any[]): Promise<Movie[]> {
   const movieData: MovieData[] = [];
-  movies.forEach((movie) => {
-    if (!MOVIE_LANGUAGES.includes(movie.language)) return;
+  for (let i = 0, length = movies.length; i < length; i++) {
+    const movie = movies[i];
+    if (!MOVIE_LANGUAGES.includes(movie.language)) continue;
     const torrents: Torrent[] = [];
     movie.torrents.forEach((torrent: any) => {
       if (torrent.quality !== TORRENT_QUALITY) return;
@@ -23,9 +25,11 @@ async function saveMovies(movies: any[]): Promise<Movie[]> {
         quality: torrent.quality,
         seeds: torrent.seeds,
         peers: torrent.peers,
-        size: torrent.size,
+        size: torrent.size_bytes / 1e9,
       });
     });
+    const torrent = torrents[0] ?? null;
+    if (!torrent) continue;
     movieData.push({
       ytsId: movie.id,
       title: movie.title,
@@ -34,18 +38,33 @@ async function saveMovies(movies: any[]): Promise<Movie[]> {
       runtime: movie.runtime,
       summary: movie.summary,
       coverImage: movie.large_cover_image,
-      torrents,
+      torrent,
     });
-  });
+  }
 
   if (movies.length === 0) return [];
   try {
-    await Promise.all(movieData.map(updateMovieCoverImage));
-    return await Movie.bulkCreate(movieData, {
-      ignoreDuplicates: true,
+    const coverImages = await Promise.all(movieData.map(updateMovieCoverImage));
+    for (let i = 0, length = movieData.length; i < length; i++) {
+      movieData[i].coverImage = coverImages[i];
+    }
+    const moviesToUpdate = await Movie.findAll({
+      where: {
+        ytsId: {
+          [Op.in]: movieData.map((item) => item.ytsId),
+        },
+      },
     });
+    await Promise.all(
+      moviesToUpdate.map((item) => {
+        const movie = movieData.find(({ ytsId }) => ytsId === item.ytsId);
+        if (!movie) return null;
+        return item.update(movie);
+      })
+    );
+    return await Movie.bulkCreate(movieData, { ignoreDuplicates: true });
   } catch (err) {
-    console.log("Failed to save movies:", err.message);
+    console.error("Failed to save movies:", err.message);
   }
   return [];
 }
