@@ -8,5 +8,5 @@ async function run() {
 }
 
 export default async function scheduler() {
-  run().finally(() => schedule("* */1 * * *", run));
+  run().finally(() => schedule("* * */1 * *", run));
 }
