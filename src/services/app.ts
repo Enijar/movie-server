@@ -14,11 +14,11 @@ export default function app() {
   app.use(express.static(config.paths.public));
   app.use(express.static(config.paths.data));
   app.use(routes);
-  scheduler();
 
   app.get("*", proxy(`http://localhost:${torrentStreamServer.port}`));
 
   app.listen(config.port, () => {
     console.log(`Server running at http://localhost:${config.port}`);
+    scheduler();
   });
 }
