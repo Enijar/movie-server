@@ -4,7 +4,7 @@ import config from "../config/config";
 import { request } from "../utils";
 import { MovieData } from "../config/types";
 
-async function downloadImage(
+export async function downloadImage(
   url: string,
   fileName: string
 ): Promise<string | null> {
