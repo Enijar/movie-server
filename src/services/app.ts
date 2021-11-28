@@ -4,7 +4,6 @@ import * as cors from "cors";
 import * as proxy from "express-http-proxy";
 import config from "../config/config";
 import routes from "../routes";
-import scheduler from "./scheduler";
 import * as torrentStreamServer from "../config/torrent-stream-server.json";
 
 export default function app() {
@@ -19,6 +18,5 @@ export default function app() {
 
   app.listen(config.port, () => {
     console.log(`Server running at http://localhost:${config.port}`);
-    scheduler();
   });
 }

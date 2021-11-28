@@ -25,3 +25,12 @@ npm run build
 pm2 start --name movie-server build/src/index.js
 pm2 start --name torrent-stream-server npm -- run server-stream
 ```
+
+Add cron job
+
+```shell
+crontab -l > cron
+echo "* */1 * * * node /var/www/movie-server/build/src/scheduler.js" >> cron
+crontab cron
+rm cron
+```
