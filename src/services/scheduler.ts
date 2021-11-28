@@ -3,8 +3,12 @@ import updateMovies from "../jobs/update-movies";
 import updateMovieCoverImages from "../jobs/update-movie-cover-images";
 
 async function run() {
-  await updateMovies();
-  await updateMovieCoverImages();
+  try {
+    await updateMovies();
+    await updateMovieCoverImages();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 export default async function scheduler() {
